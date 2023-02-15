@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!-- Wage Base -->
+    <record id="rule_parameter_us_co_suta_wage_base" model="hr.rule.parameter">
+        <field name="name">US CO Colorado SUTA Wage Base</field>
+        <field name="code">us_co_suta_wage_base</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <record id="rule_parameter_us_co_suta_wage_base_2020" model="hr.rule.parameter.value">
+        <field name="parameter_value">13600.0</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_suta_wage_base"/>
+        <field name="date_from" eval="datetime(2020, 1, 1).date()"/>
+    </record>
+
+    <!-- Rate -->
+    <record id="rule_parameter_us_co_suta_rate" model="hr.rule.parameter">
+        <field name="name">US CO Colorado SUTA Rate</field>
+        <field name="code">us_co_suta_rate</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <data noupdate="1">
+        <record id="rule_parameter_us_co_suta_rate_2020" model="hr.rule.parameter.value">
+            <field name="parameter_value">1.7</field>
+            <field name="rule_parameter_id" ref="rule_parameter_us_co_suta_rate"/>
+            <field name="date_from" eval="datetime(2020, 1, 1).date()"/>
+        </record>
+    </data>
+
+    <record id="rule_parameter_us_co_famli_rate_er" model="hr.rule.parameter">
+        <field name="name">US CO Colorado FAMLI Rate (Employer)</field>
+        <field name="code">us_co_famli_rate_er</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <record id="rule_parameter_us_co_famli_rate_er_2022" model="hr.rule.parameter.value">
+        <field name="parameter_value">0.0</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_famli_rate_er"/>
+        <field name="date_from" eval="datetime(2022, 1, 1).date()"/>
+    </record>
+    <record id="rule_parameter_us_co_famli_rate_er_2023" model="hr.rule.parameter.value">
+        <field name="parameter_value">0.45</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_famli_rate_er"/>
+        <field name="date_from" eval="datetime(2023, 1, 1).date()"/>
+    </record>
+
+    <record id="rule_parameter_us_co_famli_rate_ee" model="hr.rule.parameter">
+        <field name="name">US CO Colorado FAMLI Rate (Employee)</field>
+        <field name="code">us_co_famli_rate_ee</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <record id="rule_parameter_us_co_famli_rate_ee_2022" model="hr.rule.parameter.value">
+        <field name="parameter_value">0.0</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_famli_rate_ee"/>
+        <field name="date_from" eval="datetime(2022, 1, 1).date()"/>
+    </record>
+    <record id="rule_parameter_us_co_famli_rate_ee_2023" model="hr.rule.parameter.value">
+        <field name="parameter_value">0.45</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_famli_rate_ee"/>
+        <field name="date_from" eval="datetime(2023, 1, 1).date()"/>
+    </record>
+
+
+    <record id="rule_parameter_us_co_sit_tax_rate" model="hr.rule.parameter">
+        <field name="name">US CO Colorado SIT Tax Rate</field>
+        <field name="code">us_co_sit_tax_rate</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <record id="rule_parameter_us_co_sit_tax_rate_2020" model="hr.rule.parameter.value">
+        <field name="parameter_value">4.63</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_sit_tax_rate"/>
+        <field name="date_from" eval="datetime(2020, 1, 1).date()"/>
+    </record>
+
+    <record id="rule_parameter_us_co_sit_exemption_rate" model="hr.rule.parameter">
+        <field name="name">US CO Colorado SIT Exemption Rate</field>
+        <field name="code">us_co_sit_exemption_rate</field>
+        <field name="country_id" ref="base.us"/>
+    </record>
+    <record id="rule_parameter_us_co_sit_exemption_rate_2020" model="hr.rule.parameter.value">
+        <field name="parameter_value">4000</field>
+        <field name="rule_parameter_id" ref="rule_parameter_us_co_sit_exemption_rate"/>
+        <field name="date_from" eval="datetime(2020, 1, 1).date()"/>
+    </record>
+
+    <!-- Partners and Contribution Registers -->
+    <record id="res_partner_us_co_dor" model="res.partner">
+        <field name="name">US Colorado - Department of Labor and Employment - Unemployment Tax</field>
+    </record>
+
+    <record id="res_partner_us_co_dor_sit" model="res.partner">
+        <field name="name">US Colorado - Division of Revenue - Income Tax</field>
+    </record>
+
+    <record id="res_partner_us_co_dor_famli" model="res.partner">
+        <field name="name">US Colorado - FAMLI</field>
+    </record>
+
+    <!-- Categories -->
+
+    <!-- Rules -->
+    <record id="hr_payroll_rule_er_us_co_suta" model="hr.salary.rule">
+        <field name="sequence" eval="450"/>
+        <field name="struct_id" ref="hr_payroll_structure"/>
+        <field name="category_id" ref="hr_payroll_category_er_us_suta"/>
+        <field name="name">ER: US CO Colorado State Unemployment</field>
+        <field name="code">ER_US_CO_SUTA</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result, _ = general_state_unemployment(payslip, categories, worked_days, inputs, wage_base='us_co_suta_wage_base', rate='us_co_suta_rate', state_code='CO')</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result, result_rate = general_state_unemployment(payslip, categories, worked_days, inputs, wage_base='us_co_suta_wage_base', rate='us_co_suta_rate', state_code='CO')</field>
+        <field name="partner_id" ref="res_partner_us_co_dor"/>
+        <field name="appears_on_payslip" eval="False"/>
+    </record>
+
+    <record id="hr_payroll_rule_ee_us_co_sit" model="hr.salary.rule">
+        <field name="sequence" eval="195"/>
+        <field name="struct_id" ref="hr_payroll_structure"/>
+        <field name="category_id" ref="hr_payroll_category_ee_us_sit"/>
+        <field name="name">EE: US CO Colorado State Income Tax Withholding</field>
+        <field name="code">EE_US_CO_SIT</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result, _ = co_colorado_state_income_withholding(payslip, categories, worked_days, inputs)</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result, result_rate = co_colorado_state_income_withholding(payslip, categories, worked_days, inputs)</field>
+        <field name="partner_id" ref="res_partner_us_co_dor_sit"/>
+        <field name="appears_on_payslip" eval="True"/>
+    </record>
+
+    <record id="hr_payroll_rule_er_us_co_famli" model="hr.salary.rule">
+        <field name="sequence" eval="451"/>
+        <field name="struct_id" ref="hr_payroll_structure"/>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="name">ER: US CO Colorado State Family Medical Leave</field>
+        <field name="code">ER_US_CO_FAMLI</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result, _ = co_colorado_fmli_er(payslip, categories, worked_days, inputs)
+        </field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result, result_rate = co_colorado_fmli_er(payslip, categories, worked_days,
+            inputs)
+        </field>
+        <field name="partner_id" ref="res_partner_us_co_dor_famli"/>
+        <field name="appears_on_payslip" eval="False"/>
+    </record>
+
+    <record id="hr_payroll_rule_ee_us_co_famli" model="hr.salary.rule">
+        <field name="sequence" eval="196"/>
+        <field name="struct_id" ref="hr_payroll_structure"/>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">EE: US CO Colorado State Family Medical Leave</field>
+        <field name="code">EE_US_CO_FAMLI</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result, _ = co_colorado_fmli_ee(payslip, categories, worked_days, inputs)
+        </field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result, result_rate = co_colorado_fmli_ee(payslip, categories, worked_days,
+            inputs)
+        </field>
+        <field name="partner_id" ref="res_partner_us_co_dor_famli"/>
+        <field name="appears_on_payslip" eval="True"/>
+    </record>
+
+</odoo>
