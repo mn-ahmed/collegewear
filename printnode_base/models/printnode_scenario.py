@@ -171,6 +171,9 @@ class PrintNodeScenario(models.Model):
                 f"Objects to print defined: {objects._name}{objects.ids}")
 
             if objects:
+                printer, printer_bin = scenario._get_printer()
+                print_options = {'bin': printer_bin.name} if printer_bin else {}
+
                 if scenario.model_id != scenario.reports_model_id:
                     # When we want to print reports for different model
                     # We should call a special method to print
@@ -185,8 +188,6 @@ class PrintNodeScenario(models.Model):
                             f"{objects._name} model"
                         )
                         scenario_method = getattr(objects, scenario_method_name)
-                        printer, printer_bin = scenario._get_printer()
-                        print_options = {'bin': printer_bin.name} if printer_bin else {}
                         printed = scenario_method(
                             scenario=scenario,
                             report_id=scenario.report_id,
@@ -209,8 +210,6 @@ class PrintNodeScenario(models.Model):
                             f"{scenario.reports_model_id.model} model"
                         )
                         scenario_method = getattr(objects, scenario_method_name)
-                        printer, printer_bin = scenario._get_printer()
-                        print_options = {'bin': printer_bin.name} if printer_bin else {}
                         printed = scenario_method(
                             scenario=scenario,
                             report_id=scenario.report_id,
@@ -219,8 +218,6 @@ class PrintNodeScenario(models.Model):
                             options=print_options,
                         )
                     else:
-                        printer, printer_bin = scenario._get_printer()
-                        options = {'bin': printer_bin.name} if printer_bin else {}
                         scenario.printnode_logger(
                             Constants.SCENARIOS_LOG_TYPE,
                             'Printing will be done via the default printnode_print method'
@@ -229,13 +226,13 @@ class PrintNodeScenario(models.Model):
                             scenario.report_id,
                             objects,
                             copies=scenario.number_of_copies,
-                            options=options,
+                            options=print_options,
                         )
 
                         printed = bool(res)
 
-        if printed:
-            scenarios.printnode_logger(Constants.SCENARIOS_LOG_TYPE, 'Printing successful')
+                if printed:
+                    scenario.printnode_logger(Constants.SCENARIOS_LOG_TYPE, 'Printing successful')
 
         return printed
 

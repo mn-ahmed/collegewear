@@ -9,7 +9,7 @@
     """,
     'version': '15.0.2.4.0',
     'category': 'Tools',
-    "images": ["static/description/images/image1.gif"],
+    "images": ["static/description/images/logo.gif"],
     'author': 'VentorTech',
     'website': 'https://ventor.tech',
     'support': 'support@ventor.tech',

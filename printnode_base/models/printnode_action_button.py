@@ -157,7 +157,7 @@ class PrintNodeActionButton(models.Model):
         return action
 
     def _get_post_pre_action_button_ids(self, model, method):
-        actions = self.env[self._name].search([
+        actions = self.env[self._name].sudo().search([
             ('model_id.model', '=', model),
             ('method_id.method', '=', method),
             ('report_id', '!=', False),
