@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+     <!--
+        @param {mail.systray.HelpSystray} widget
+        @param {Object[]} widget.Help
+    -->
+    <t t-name="HelpSystray">
+        <div class="new_icon">
+            <div class="icon_div">
+                <div class="toggle-icon" role="button">
+                    <a href="https://silentinfotech.com/contact-us" target="_blank">
+                    <img  class="img img-responsive" src="/bulk_search_sit/static/description/logo-remove.png" title="Help"  height="40" width="40"/></a>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
